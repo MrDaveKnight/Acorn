@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_snc_dk_acorn.ASTree</api_name>
+        <client_callable>false</client_callable>
+        <description/>
+        <name>ASTree</name>
+        <script><![CDATA[var ASTree = Class.create();
+
+ASTree.parse = function (input, options) {
+	return Parser.run(input, options);
+};
+
+ASTree.walk = function (node, visitors, baseVisitor, state) {
+	
+	// We are tracking variable declarations and other stats during the walk.
+	// This is a Healthscan modification.
+	// These properties must be defined
+	if (state.variables === undefined)
+		state.variables = {}; // new Object();
+	if (state.function_depth === undefined)
+		state.function_depth = 0;
+
+	return Walker.runWithAncestors(node, visitors, baseVisitor, state);
+};
+
+
+
+]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>dave.knight</sys_created_by>
+        <sys_created_on>2018-08-03 19:53:30</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>35c75a4c4f3f5f40ea338e328110c78b</sys_id>
+        <sys_mod_count>61</sys_mod_count>
+        <sys_name>ASTree</sys_name>
+        <sys_package display_value="Acorn" source="x_snc_dk_acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_scope>
+        <sys_update_name>sys_script_include_35c75a4c4f3f5f40ea338e328110c78b</sys_update_name>
+        <sys_updated_by>dave.knight</sys_updated_by>
+        <sys_updated_on>2018-08-06 16:27:20</sys_updated_on>
+    </sys_script_include>
+</record_update>
