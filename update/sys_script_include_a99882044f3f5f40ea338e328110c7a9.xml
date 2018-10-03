@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sys_script_include">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
     <sys_script_include action="INSERT_OR_UPDATE">
         <access>package_private</access>
         <active>true</active>
         <api_name>x_snc_dk_acorn.Walker</api_name>
+        <caller_access/>
         <client_callable>false</client_callable>
-        <description/>
+        <description>Look for HEALTHSCAN to find customizations</description>
         <name>Walker</name>
         <script><![CDATA[var Walker = Class.create();
 
@@ -49,8 +49,12 @@ function ancestor(node, visitors, baseVisitor, state) {
     var isNew = node !== ancestors[ancestors.length - 1];
     if (isNew) { 
 		ancestors.push(node);
-	    st.parent_node = node;  // Healthscan
 	}
+	  
+	// HEALTHSCAN
+	// Counts the number of nodes in the AST for this script, i.e. how big is the tree?
+	st.stats.ScriptSize++;
+	  
     baseVisitor[type](node, st, c);
     if (found) { found(node, st || ancestors, ancestors); }
     if (isNew) { ancestors.pop(); }
@@ -208,7 +212,14 @@ base.Program = base.BlockStatement = function (node, st, c) {
 base.Statement = skipThrough;
 base.EmptyStatement = ignore;
 base.ExpressionStatement = base.ParenthesizedExpression =
-  function (node, st, c) { return c(node.expression, st, "Expression"); };
+  function (node, st, c) { 
+	// HEALTHSCAN
+	// Originally was: return c(node.expression, st, "Expression"); 
+	st.block_scope[++st.block_depth] = {};
+	var ret_val = c(node.expression, st, "Expression"); 
+	st.block_scope[st.block_depth--] = null;  
+	return ret_val;
+};
 base.IfStatement = function (node, st, c) {
   c(node.test, st, "Expression");
   c(node.consequent, st, "Statement");
@@ -307,7 +318,7 @@ base.Function = function (node, st, c) {
   c(node.body, st, node.expression ? "ScopeExpression" : "ScopeBody");
 
    // HEALTHSCAN
-  st.variables[st.function_depth--] = 0;  
+  st.variables[st.function_depth--] = null;  
 
 };
 
@@ -458,7 +469,7 @@ Walker.runWithAncestors = function (node, visitors, baseVisitor, state) {
         <sys_created_on>2018-08-03 18:21:32</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>a99882044f3f5f40ea338e328110c7a9</sys_id>
-        <sys_mod_count>13</sys_mod_count>
+        <sys_mod_count>25</sys_mod_count>
         <sys_name>Walker</sys_name>
         <sys_package display_value="Acorn" source="x_snc_dk_acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_package>
         <sys_policy>read</sys_policy>
@@ -466,6 +477,6 @@ Walker.runWithAncestors = function (node, visitors, baseVisitor, state) {
         <sys_scope display_value="Acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_scope>
         <sys_update_name>sys_script_include_a99882044f3f5f40ea338e328110c7a9</sys_update_name>
         <sys_updated_by>dave.knight</sys_updated_by>
-        <sys_updated_on>2018-08-04 15:05:15</sys_updated_on>
+        <sys_updated_on>2018-10-03 15:57:40</sys_updated_on>
     </sys_script_include>
 </record_update>

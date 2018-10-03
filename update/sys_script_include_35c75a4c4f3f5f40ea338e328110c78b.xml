@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<record_update table="sys_script_include">
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
     <sys_script_include action="INSERT_OR_UPDATE">
         <access>public</access>
         <active>true</active>
         <api_name>x_snc_dk_acorn.ASTree</api_name>
+        <caller_access/>
         <client_callable>false</client_callable>
         <description/>
         <name>ASTree</name>
@@ -22,6 +22,14 @@ ASTree.walk = function (node, visitors, baseVisitor, state) {
 		state.variables = {}; // new Object();
 	if (state.function_depth === undefined)
 		state.function_depth = 0;
+	if (state.variables[0] === undefined)
+		state.variables[0] = {}; // new Object();
+	if (state.block_scope === undefined)
+		state.block_scope = {}; // new Object();
+	if (state.block_depth === undefined)
+		state.block_depth = 0;
+	if (state.block_scope[0] === undefined)
+		state.block_scope[0] = {}; // new Object();
 
 	return Walker.runWithAncestors(node, visitors, baseVisitor, state);
 };
@@ -34,7 +42,7 @@ ASTree.walk = function (node, visitors, baseVisitor, state) {
         <sys_created_on>2018-08-03 19:53:30</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>35c75a4c4f3f5f40ea338e328110c78b</sys_id>
-        <sys_mod_count>61</sys_mod_count>
+        <sys_mod_count>64</sys_mod_count>
         <sys_name>ASTree</sys_name>
         <sys_package display_value="Acorn" source="x_snc_dk_acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_package>
         <sys_policy>read</sys_policy>
@@ -42,6 +50,6 @@ ASTree.walk = function (node, visitors, baseVisitor, state) {
         <sys_scope display_value="Acorn">53b5c2c04f3f5f40ea338e328110c71d</sys_scope>
         <sys_update_name>sys_script_include_35c75a4c4f3f5f40ea338e328110c78b</sys_update_name>
         <sys_updated_by>dave.knight</sys_updated_by>
-        <sys_updated_on>2018-08-06 16:27:20</sys_updated_on>
+        <sys_updated_on>2018-08-17 13:57:21</sys_updated_on>
     </sys_script_include>
 </record_update>
